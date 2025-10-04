@@ -1,4 +1,6 @@
 from typing import List, Dict, Tuple, Optional, Callable
+
+
 class Vertex:
     """
     Represents a vertex in a graph.
@@ -30,7 +32,12 @@ class Vertex:
         Returns:
             List[Tuple[str, str, float]]: The list of edges from this vertex.
         """
-        pass
+        # TODO: implement get_children
+        return list(self.children.values())
+        # child_lst = []
+        # for key in self.children:
+        #     child_tuple = self.children[key]
+        #     child_lst.append(child_tuple)
 
 
 class Graph:
@@ -57,7 +64,8 @@ class Graph:
         Returns:
             List[Vertex]: The list of vertices in the graph.
         """
-        pass
+        # TODO: implement get_vertices
+        return self.vertices
 
     def is_child(self, u_name: str, v_name: str) -> bool:
         """
@@ -70,7 +78,13 @@ class Graph:
         Returns:
             bool: True if the vertex v_name is a child of the vertex u_name, False otherwise.
         """
-        pass
+        # TODO: Implement is_child
+        for v in self.get_vertices():
+            if v.name == u_name: # find parent vertex (vertex with u_name)
+                for e in v.get_children(): # go thru its (parent, child, weight) edges
+                    if e[1] == v_name:
+                        return True # return true if child's name matches
+        return False
 
     def get_edge(self, u_name: str, v_name: str) -> Optional[Tuple[str, str, float]]:
         """
@@ -84,7 +98,16 @@ class Graph:
             Optional[Tuple[str, str, float]]: The edge if it exists, 
             or None if no such edge is found.
         """
-        pass
+        # TODO: implement get_edge
+        if self.is_child(u_name, v_name) is True:
+            parent = None
+            for v in self.get_vertices():
+                if v.name == u_name:
+                    parent = v
+            for edge in parent.get_children():
+                if edge[1] == v_name:
+                    return edge
+        return None
 
 
 class Device(Vertex):
@@ -99,14 +122,17 @@ class Device(Vertex):
         network (Graph): A graph representing this device's discovered network.
     """
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, children: Optional[Dict[str, Tuple[str, str, float]]] = None,
+                 network: Optional[Graph] = None):
         """
         Initializes a Device.
 
         Args:
             name (str): The label or identifier of the device.
         """
-        pass
+        # TODO: initialize the device class
+        super().__init__(name, children)
+        self.network = network
 
     def discover_network(self, find_devices_fn: Callable[[List[str]], List[Tuple[str, str, float]]]) -> None:
         """
@@ -119,6 +145,7 @@ class Device(Vertex):
                 A function that takes an ordered list of device names (i.e., a path) 
                 and returns the edges from the last device in the path to its immediate children.
         """
+        # TODO: implement discover_network
         pass
 
     def find_path(self, d_name: str) -> Optional[List[str]]:
@@ -133,6 +160,7 @@ class Device(Vertex):
             Optional[List[str]]: An ordered list of device names representing the path 
             from this device to the target. If no path exists, returns None.
         """
+        # TODO: implement find_path
         pass
 
 
